@@ -47,6 +47,7 @@ return [
             'username'      => 'rd',
             'password'      => 'rd',
             'database'      => 'rd',
+            'quoteIdentifiers' => true,
             // Comment out the line below if you are using PostgreSQL
             ////'encoding' => 'utf8mb4',
          	'encoding'      => 'utf8',
