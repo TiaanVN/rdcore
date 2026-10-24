@@ -18,14 +18,23 @@ echo - Keegan White for all the work on traefik and improving the iNethi archite
 echo
 echo Starting Build ....
 echo
-echo Copying database files to volume mounts for MariaDB ...
-mkdir  -p /mnt/data/radiusdesk || exit 1
-mkdir  -p /mnt/data/radiusdesk/db_startup || exit 1
-mkdir  -p /mnt/data/radiusdesk/db_startup/db_patches || exit 1
-mkdir  -p /mnt/data/radiusdesk/db_conf || exit 1
-chmod -R 777 /mnt/data/radiusdesk || exit 1
-chmod -R 777 /mnt/data/radiusdesk/db_startup || exit 1
-chmod -R 777 /mnt/data/radiusdesk/db_conf || exit 1
+echo Setting up volume directories ...
+mkdir -p "$RADIUSDESK_VOLUME" || exit 1
+mkdir -p "$RADIUSDESK_VOLUME/db_startup" || exit 1
+mkdir -p "$RADIUSDESK_VOLUME/db_startup/db_patches" || exit 1
+mkdir -p "$RADIUSDESK_VOLUME/db_conf" || exit 1
+mkdir -p "$RADIUSDESK_VOLUME/uploads/realms" || exit 1
+mkdir -p "$RADIUSDESK_VOLUME/uploads/dynamic_details" || exit 1
+mkdir -p "$RADIUSDESK_VOLUME/uploads/dynamic_photos" || exit 1
+mkdir -p "$RADIUSDESK_VOLUME/uploads/access_providers" || exit 1
+mkdir -p "$RADIUSDESK_VOLUME/uploads/hardwares" || exit 1
+mkdir -p "$RADIUSDESK_VOLUME/imagecache" || exit 1
+
+
+
+chmod -R 777 "$RADIUSDESK_VOLUME" || exit 1
+
+
 
 if [ -d "rdcore" ]
 then
@@ -39,6 +48,13 @@ cp -r rd_cake5/rd_cake/setup/db/* $RADIUSDESK_VOLUME/db_startup/db_patches/ || e
 cp db_priveleges.sql $RADIUSDESK_VOLUME/db_startup || exit 1
 cp startup.sh $RADIUSDESK_VOLUME/db_startup || exit 1
 cp my_custom.cnf $RADIUSDESK_VOLUME/db_conf || exit 1
+
+# Seed default images to persistent volume if not already present
+for dir in realms dynamic_details dynamic_photos access_providers hardwares; do
+    if [ -d "rd_cake5/rd_cake/webroot/img/$dir" ]; then
+        cp -rn "rd_cake5/rd_cake/webroot/img/$dir/"* "$RADIUSDESK_VOLUME/uploads/$dir/" 2>/dev/null || true
+    fi
+done
 
 echo
 echo Building docker database container ...

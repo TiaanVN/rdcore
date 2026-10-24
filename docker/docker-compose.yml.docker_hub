@@ -12,6 +12,14 @@ services:
       - "1812:1812/udp"
       - "1813:1813/udp"
 
+    volumes:
+      - ${RADIUSDESK_VOLUME}/uploads/realms:/var/www/html/cake4/rd_cake/webroot/img/realms
+      - ${RADIUSDESK_VOLUME}/uploads/dynamic_details:/var/www/html/cake4/rd_cake/webroot/img/dynamic_details
+      - ${RADIUSDESK_VOLUME}/uploads/dynamic_photos:/var/www/html/cake4/rd_cake/webroot/img/dynamic_photos
+      - ${RADIUSDESK_VOLUME}/uploads/access_providers:/var/www/html/cake4/rd_cake/webroot/img/access_providers
+      - ${RADIUSDESK_VOLUME}/uploads/hardwares:/var/www/html/cake4/rd_cake/webroot/img/hardwares
+      - ${RADIUSDESK_VOLUME}/imagecache:/var/www/html/cake4/rd_cake/webroot/files/imagecache
+
   rdmariadb:
     container_name: radiusdesk-mariadb
     image: mariadb:11.8
