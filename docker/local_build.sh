@@ -80,7 +80,7 @@ echo "Setting DB host to 'rdmariadb' in app_local.php ..."
 sed -i "s/'host' *=> *'localhost'/'host' => 'rdmariadb'/g" rd_cake5/rd_cake/config/app_local.php
 
 docker compose build || exit 1
-docker compose up -d radiusdesk || exit 1
+docker compose up -d || exit 1
 
 echo
 echo All done!

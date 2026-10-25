@@ -1,0 +1,24 @@
+{
+    # Global options
+    # Uncomment and set your email if using a public domain for Let's Encrypt notifications:
+    # email admin@example.com
+}
+
+# The site address defaults to 'localhost' if DOMAIN is not specified in .env.
+# - If DOMAIN is set to a public domain (e.g., radius.example.com), Caddy automatically
+#   provisions and renews Let's Encrypt / ZeroSSL certificates.
+# - If DOMAIN is 'localhost', Caddy creates an internal self-signed CA certificate.
+# - If you are using an IP address (e.g. 192.168.1.100), you can add 'tls internal' inside the block.
+{$DOMAIN:localhost} {
+    reverse_proxy radiusdesk:80
+
+    # Compress responses for faster load times
+    encode zstd gzip
+
+    # Optional access logging to stdout (docker logs)
+    log {
+        output stdout
+        format console
+    }
+}
+
